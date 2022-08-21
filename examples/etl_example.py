@@ -8,7 +8,7 @@ from etl_decorators.tasks import etl_task, etl_flow
 @etl_task
 def extract() -> dict:
     if random.randint(0, 4) > 1:
-        logging.error("Error in asking for help!")
+        logging.error("Erro ao contatar as garotas mágicas!")
         raise ZeroDivisionError
     return {'response':200, 'data':'Puella Magi Madoka Magica'}
 
@@ -20,9 +20,9 @@ def transform(response: dict) -> list:
     words = [word.upper() for word in words]
     return words
 
-
+@etl_task
 def load(words: list):
-    print("SHE CAME, is the: ")
+    print("Ela Chegou, É a: ")
     for word in words:
         print(word)
 
