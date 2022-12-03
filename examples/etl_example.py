@@ -1,30 +1,32 @@
-
 from retry import retry
 import logging
 import random
 from etl_decorators.tasks import etl_task, etl_flow
 
-@retry(ZeroDivisionError,tries=4,delay=2)
+
+@retry(ZeroDivisionError, tries=4, delay=2)
 @etl_task
 def extract() -> dict:
     if random.randint(0, 4) > 1:
-        logging.error("Erro ao contatar as garotas mágicas!")
+        logging.error('Erro ao contatar as garotas mágicas!')
         raise ZeroDivisionError
-    return {'response':200, 'data':'Puella Magi Madoka Magica'}
+    return {'response': 200, 'data': 'Puella Magi Madoka Magica'}
 
 
 @etl_task
 def transform(response: dict) -> list:
     words: str = response['data']
-    words = words.split(" ")
+    words = words.split(' ')
     words = [word.upper() for word in words]
     return words
 
+
 @etl_task
 def load(words: list):
-    print("Ela Chegou, É a: ")
+    print('Ela Chegou, É a: ')
     for word in words:
         print(word)
+
 
 @etl_flow('MadokaFlow')
 def main():
@@ -32,7 +34,8 @@ def main():
     transformed = transform(extracted)
     load(transformed)
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     handler = logging.StreamHandler()
